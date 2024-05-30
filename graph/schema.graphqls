@@ -1,0 +1,42 @@
+type Publication {
+  id: ID!
+  author: String!
+  title: String!
+  content: String!
+  comments: [Comment!]!
+  commentsDisabled: Boolean!
+}
+
+type Comment {
+  id: ID!
+  author: String!
+  publicationId: ID!
+  parentId: ID
+  content: String!
+}
+
+type PublicationComments {
+  comments: [Comment!]!
+  totalCount: Int!
+}
+
+type Query {
+  publications: [Publication!]!
+  publication(id: ID!): Publication
+  comments(publicationId: ID!, limit: Int, offset: Int): [Comment!]!
+}
+
+type Mutation {
+  createPublication(title: String!, content: String!, commentsDisabled: Boolean!): Publication!
+  createComment(author: String!, publicationId: ID!, parentId: ID, content: String!): Comment!
+}
+
+type Subscription {
+  commentNotification(publicationId: ID!): Comment!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
